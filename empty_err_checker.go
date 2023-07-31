@@ -30,7 +30,21 @@ func run(pass *analysis.Pass) (any, error) {
 	inspect.Preorder(nodeFilter, func(n ast.Node) {
 		switch n := n.(type) {
 		case *ast.IfStmt:
+			var isAssignedErr bool
 			for _, b := range n.Body.List {
+				// NOTE: check if err is assigned
+				if assignStmt, ok := b.(*ast.AssignStmt); ok {
+					for _, expr := range assignStmt.Lhs {
+						ident, ok := expr.(*ast.Ident)
+						if !ok {
+							continue
+						}
+						if ident.Name == "err" && pass.TypesInfo.Types[ident].Type.String() == "error" {
+							isAssignedErr = true
+						}
+					}
+				}
+
 				if returnStmt, ok := b.(*ast.ReturnStmt); ok {
 					for _, result := range returnStmt.Results {
 						ident, ok := result.(*ast.Ident)
@@ -40,20 +54,26 @@ func run(pass *analysis.Pass) (any, error) {
 						if ident.Name == "err" && pass.TypesInfo.Types[ident].Type.String() == "error" {
 							binaryExpr, ok := n.Cond.(*ast.BinaryExpr)
 							if !ok {
-								pass.Reportf(returnStmt.Pos(), "returned error is not checked.")
+								if !isAssignedErr {
+									pass.Reportf(returnStmt.Pos(), "returned error is not checked.")
+								}
 								continue
 							}
 							xIdent, ok := binaryExpr.X.(*ast.Ident)
 							if !ok {
-								pass.Reportf(returnStmt.Pos(), "returned error is not checked.")
+								if !isAssignedErr {
+									pass.Reportf(returnStmt.Pos(), "returned error is not checked.")
+								}
 								continue
 							}
 							yIdnet, ok := binaryExpr.Y.(*ast.Ident)
 							if !ok {
-								pass.Reportf(returnStmt.Pos(), "returned error is not checked.")
+								if !isAssignedErr {
+									pass.Reportf(returnStmt.Pos(), "returned error is not checked.")
+								}
 								continue
 							}
-							if !(xIdent.Name == "err" && yIdnet.Name == "nil" && binaryExpr.Op.String() == "!=") {
+							if !(xIdent.Name == "err" && yIdnet.Name == "nil" && binaryExpr.Op.String() == "!=") && !isAssignedErr {
 								pass.Reportf(returnStmt.Pos(), "returned error is not checked.")
 							}
 						}
