@@ -1,54 +1,55 @@
 package a
 
-import (
-	"errors"
-	"math/rand"
-	"time"
-)
+import "errors"
 
-func a() {
-	rand.Seed(time.Now().UnixNano())
-	f := func() error {
-		_, err := do()
-		if err != nil {
-			return err
-		}
-		isInvalid := checkSomething()
-		if isInvalid {
-			return err // want "returned error is not checked."
-		}
-		return nil
-	}
-	if err := f(); err != nil {
+func main() {
+	err := validErrChecker()
+	if err != nil {
 		panic(err)
 	}
 
-	if err := returnEmptyErr(); err != nil {
+	err = validErrChecker2()
+	if err != nil {
+		panic(err)
+	}
+
+	err = inValidErrChecker()
+	if err != nil {
 		panic(err)
 	}
 }
 
-func returnEmptyErr() error {
-	_, err := do()
+func validErrChecker() error {
+	err := verifySomething()
 	if err != nil {
 		return err
 	}
-	isInvalid := checkSomething()
-	if isInvalid {
+	return nil
+}
+
+func validErrChecker2() error {
+	var err error
+	isValid := isValid()
+	if !isValid {
+		err = errors.New("error")
+		return err
+	}
+	return nil
+}
+
+func inValidErrChecker() error {
+	var err error
+	isValid := isValid()
+	if !isValid {
 		return err // want "returned error is not checked."
 	}
 	return nil
 }
 
-func do() (int, error) {
-	i := rand.Intn(10)
-	if i == 0 {
-		return i, errors.New("error")
-	} else {
-		return i, nil
-	}
+func isValid() bool {
+	return false
 }
 
-func checkSomething() bool {
-	return true
+func verifySomething() error {
+	return errors.New("error")
 }
