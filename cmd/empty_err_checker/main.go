@@ -3,7 +3,7 @@ package main
 import (
 	"empty_err_checker"
 
-	"golang.org/x/tools/go/analysis/unitchecker"
+	"golang.org/x/tools/go/analysis/singlechecker"
 )
 
-func main() { unitchecker.Main(empty_err_checker.Analyzer) }
+func main() { singlechecker.Main(empty_err_checker.Analyzer) }
