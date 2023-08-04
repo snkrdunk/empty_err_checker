@@ -39,7 +39,7 @@ func run(pass *analysis.Pass) (any, error) {
 						if !ok {
 							continue
 						}
-						if ident.Name == "err" && pass.TypesInfo.Types[ident].Type.String() == "error" {
+						if ident.Name == "err" {
 							isAssignedErr = true
 						}
 					}

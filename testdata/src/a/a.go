@@ -1,6 +1,9 @@
 package a
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 func main() {
 	err := validErrChecker()
@@ -14,6 +17,11 @@ func main() {
 	}
 
 	err = inValidErrChecker()
+	if err != nil {
+		panic(err)
+	}
+
+	err = inValidErrChecker2()
 	if err != nil {
 		panic(err)
 	}
@@ -31,7 +39,7 @@ func validErrChecker2() error {
 	var err error
 	isValid := isValid()
 	if !isValid {
-		err = errors.New("error")
+		err = fmt.Errorf("error")
 		return err
 	}
 	return nil
@@ -39,6 +47,18 @@ func validErrChecker2() error {
 
 func inValidErrChecker() error {
 	var err error
+	isValid := isValid()
+	if !isValid {
+		return err // want "returned error is not checked."
+	}
+	return nil
+}
+
+func inValidErrChecker2() error {
+	err := verifySomething()
+	if err != nil {
+		return err
+	}
 	isValid := isValid()
 	if !isValid {
 		return err // want "returned error is not checked."
