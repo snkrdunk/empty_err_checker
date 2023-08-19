@@ -96,6 +96,15 @@ func inValidErrChecker2() error {
 	return nil
 }
 
+func invalidErrChecker3() error {
+	err := verifySomething()
+	isValid := isValid()
+	if isValid {
+		return err // want "returned error is not checked."
+	}
+	return nil
+}
+
 func isValid() bool {
 	return false
 }
