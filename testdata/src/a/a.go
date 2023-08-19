@@ -45,6 +45,32 @@ func validErrChecker2() error {
 	return nil
 }
 
+func validErrChecker3() error {
+	err := verifySomething()
+	if err != nil {
+		if !isValid() {
+			return err
+		}
+		return err
+	}
+	return nil
+}
+
+func validErrChecker4() error {
+	err := verifySomething()
+	if err != nil {
+		return err
+	}
+	if err == nil {
+		err := errors.New("error")
+		if !isValid() {
+			return err
+		}
+		return err
+	}
+	return nil
+}
+
 func inValidErrChecker() error {
 	var err error
 	isValid := isValid()
@@ -59,8 +85,10 @@ func inValidErrChecker2() error {
 	if err != nil {
 		return err
 	}
-	isValid := isValid()
-	if !isValid {
+	if err == nil {
+		if !isValid() {
+			return err // want "returned error is not checked."
+		}
 		return err // want "returned error is not checked."
 	}
 	return nil
