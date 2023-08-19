@@ -5,28 +5,6 @@ import (
 	"fmt"
 )
 
-func main() {
-	err := validErrChecker()
-	if err != nil {
-		panic(err)
-	}
-
-	err = validErrChecker2()
-	if err != nil {
-		panic(err)
-	}
-
-	err = inValidErrChecker()
-	if err != nil {
-		panic(err)
-	}
-
-	err = inValidErrChecker2()
-	if err != nil {
-		panic(err)
-	}
-}
-
 func validErrChecker() error {
 	err := verifySomething()
 	if err != nil {
@@ -66,6 +44,14 @@ func validErrChecker4() error {
 		if !isValid() {
 			return err
 		}
+		return err
+	}
+	return nil
+}
+
+func validErrChecker5() error {
+	err := verifySomething()
+	if err != nil && !isValid() {
 		return err
 	}
 	return nil
