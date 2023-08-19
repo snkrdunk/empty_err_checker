@@ -51,7 +51,23 @@ func validErrChecker4() error {
 
 func validErrChecker5() error {
 	err := verifySomething()
-	if err != nil && !isValid() {
+	if err != nil && !isValid() || true {
+		return err
+	}
+	return nil
+}
+
+func validErrChecker6() error {
+	err := verifySomething()
+	if !isValid() && err != nil || true {
+		return err
+	}
+	return nil
+}
+
+func validErrChecker7() error {
+	err := verifySomething()
+	if !isValid() && true || err != nil {
 		return err
 	}
 	return nil
