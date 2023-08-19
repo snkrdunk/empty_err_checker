@@ -58,14 +58,14 @@ func getEmptyErrReturnStmt(pass *analysis.Pass, current *ast.IfStmt, parents []*
 		if !isReturnErr(pass, r) {
 			return nil
 		}
-		if isCheckedIfErrIsNil(current) {
+		if isCheckedIfErrIsNil(current.Cond, nil) {
 			return nil
 		}
 		if isAssignedErr(current) {
 			return nil
 		}
 		for i := range parents {
-			if isCheckedIfErrIsNil(parents[i]) {
+			if isCheckedIfErrIsNil(parents[i].Cond, nil) {
 				return nil
 			}
 			if isAssignedErr(parents[i]) {
@@ -92,20 +92,25 @@ func isReturnErr(pass *analysis.Pass, r *ast.ReturnStmt) bool {
 	return isReturnErr
 }
 
-func isCheckedIfErrIsNil(ifStmt *ast.IfStmt) bool {
-	binaryExpr, ok := ifStmt.Cond.(*ast.BinaryExpr)
-	if !ok {
-		return false
+// NOTE: if err != nil && !isValid() || isChecked() {} のような条件を再起的にチェックしてる
+func isCheckedIfErrIsNil(cond any, preBinaryExpr *ast.BinaryExpr) bool {
+	switch n := cond.(type) {
+	case *ast.BinaryExpr:
+		xRes := isCheckedIfErrIsNil(n.X, cond.(*ast.BinaryExpr))
+		yRes := isCheckedIfErrIsNil(n.Y, cond.(*ast.BinaryExpr))
+		return xRes || yRes
+	case *ast.Ident:
+		xIdent, ok := preBinaryExpr.X.(*ast.Ident)
+		if !ok {
+			return false
+		}
+		yIdent, ok := preBinaryExpr.Y.(*ast.Ident)
+		if !ok {
+			return false
+		}
+		return xIdent.Name == "err" && yIdent.Name == "nil" && preBinaryExpr.Op.String() == "!="
 	}
-	xIdent, ok := binaryExpr.X.(*ast.Ident)
-	if !ok {
-		return false
-	}
-	yIdent, ok := binaryExpr.Y.(*ast.Ident)
-	if !ok {
-		return false
-	}
-	return xIdent.Name == "err" && yIdent.Name == "nil" && binaryExpr.Op.String() == "!="
+	return false
 }
 
 func isAssignedErr(ifStmt *ast.IfStmt) bool {
