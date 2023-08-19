@@ -100,6 +100,9 @@ func isCheckedIfErrIsNil(cond any, preBinaryExpr *ast.BinaryExpr) bool {
 		yRes := isCheckedIfErrIsNil(n.Y, cond.(*ast.BinaryExpr))
 		return xRes || yRes
 	case *ast.Ident:
+		if preBinaryExpr == nil {
+			return false
+		}
 		xIdent, ok := preBinaryExpr.X.(*ast.Ident)
 		if !ok {
 			return false
