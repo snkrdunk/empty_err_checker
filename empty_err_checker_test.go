@@ -3,7 +3,7 @@ package empty_err_checker_test
 import (
 	"testing"
 
-	"empty_err_checker"
+	"github.com/snkrdunk/empty_err_checker"
 
 	"github.com/gostaticanalysis/testutil"
 	"golang.org/x/tools/go/analysis/analysistest"

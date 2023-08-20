@@ -1,7 +1,7 @@
 package main
 
 import (
-	"empty_err_checker"
+	"github.com/snkrdunk/empty_err_checker"
 
 	"golang.org/x/tools/go/analysis/singlechecker"
 )

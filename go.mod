@@ -1,4 +1,4 @@
-module empty_err_checker
+module github.com/snkrdunk/empty_err_checker
 
 go 1.20
 
