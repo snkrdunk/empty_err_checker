@@ -34,7 +34,7 @@ func run(pass *analysis.Pass) (any, error) {
 			}
 			parentIfStmtSlice := []*ast.IfStmt{}
 			for i := range stack[:len(stack)-1] {
-				if s, ok := stack[i].(*ast.IfStmt); ok && i != len(stack)-1 {
+				if s, ok := stack[i].(*ast.IfStmt); ok {
 					parentIfStmtSlice = append(parentIfStmtSlice, s)
 				}
 			}
