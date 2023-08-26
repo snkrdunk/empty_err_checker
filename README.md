@@ -21,5 +21,5 @@ Check [the test code](https://github.com/snkrdunk/empty_err_checker/blob/main/te
 # Installation
 
 ```console
-go install github.com/snkrdunk/empty_err_checker@latest
+go install github.com/snkrdunk/empty_err_checker/cmd/empty_err_checker@latest
 ```
