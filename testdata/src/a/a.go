@@ -100,7 +100,7 @@ func invalidErrChecker3() error {
 	err := verifySomething()
 	isValid := isValid()
 	if isValid {
-		return err
+		return err // want "returned error is not checked."
 	}
 	return nil
 }
