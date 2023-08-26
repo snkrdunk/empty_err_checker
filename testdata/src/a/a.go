@@ -73,7 +73,7 @@ func validErrChecker7() error {
 	return nil
 }
 
-func inValidErrChecker() error {
+func invalidErrChecker() error {
 	var err error
 	isValid := isValid()
 	if !isValid {
@@ -82,7 +82,7 @@ func inValidErrChecker() error {
 	return nil
 }
 
-func inValidErrChecker2() error {
+func invalidErrChecker2() error {
 	err := verifySomething()
 	if err != nil {
 		return err
