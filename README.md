@@ -2,7 +2,7 @@
 
 [![Test](https://github.com/snkrdunk/empty_err_checker/actions/workflows/test.yml/badge.svg)](https://github.com/snkrdunk/empty_err_checker/actions/workflows/test.yml)
 
-empyt_err_checker is checking whether the return value 'err' is nil.
+empty_err_checker is checking whether the return value 'err' is nil.
 
 example
 ```go
