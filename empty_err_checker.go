@@ -8,11 +8,9 @@ import (
 	"golang.org/x/tools/go/ast/inspector"
 )
 
-const doc = "empty_err_checker is ..."
-
 var Analyzer = &analysis.Analyzer{
 	Name: "empty_err_checker",
-	Doc:  doc,
+	Doc:  "empty_err_checker is checking whether the return value 'err' is nil.",
 	Run:  run,
 	Requires: []*analysis.Analyzer{
 		inspect.Analyzer,
