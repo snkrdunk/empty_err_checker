@@ -19,7 +19,7 @@ var Analyzer = &analysis.Analyzer{
 }
 
 func init() {
-	register.Plugin("custom_linters", New)
+	register.Plugin(Analyzer.Name, New)
 }
 
 type PluginImpl struct{}
