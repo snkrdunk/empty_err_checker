@@ -3,6 +3,7 @@ package empty_err_checker
 import (
 	"go/ast"
 
+	"github.com/golangci/plugin-module-register/register"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
 	"golang.org/x/tools/go/ast/inspector"
@@ -15,6 +16,24 @@ var Analyzer = &analysis.Analyzer{
 	Requires: []*analysis.Analyzer{
 		inspect.Analyzer,
 	},
+}
+
+func init() {
+	register.Plugin(Analyzer.Name, New)
+}
+
+type PluginImpl struct{}
+
+func New(settings any) (register.LinterPlugin, error) {
+	return &PluginImpl{}, nil
+}
+
+func (f *PluginImpl) BuildAnalyzers() ([]*analysis.Analyzer, error) {
+	return []*analysis.Analyzer{Analyzer}, nil
+}
+
+func (f *PluginImpl) GetLoadMode() string {
+	return register.LoadModeSyntax
 }
 
 func run(pass *analysis.Pass) (any, error) {
